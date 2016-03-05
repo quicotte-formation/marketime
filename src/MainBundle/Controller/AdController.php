@@ -49,7 +49,7 @@ class AdController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($ad);
             $em->flush();
-
+            
             return $this->redirectToRoute('ad_show', array('id' => $ad->getId()));
         }
 

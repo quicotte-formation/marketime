@@ -4,3 +4,10 @@
 <a href="{{ url('payment_index') }}">Payments</a>
 <a href="{{ url('tag_index') }}">Tags</a>
 <a href="{{ url('user_index') }}">Users</a>
+{% set userLogin=render( url('user_logged_login') ) %}
+{% if userLogin is not empty %}
+    Logged-in as {{ userLogin }}
+    <a href="{{ url('user_logout') }}">Logout</a>
+{% else %}
+    <a href="{{ url('user_login') }}">Login</a>
+{% endif %}

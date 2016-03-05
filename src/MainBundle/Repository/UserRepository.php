@@ -12,4 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    public function findOneByEmailAndPassword($email, $password){
+        
+        $query = $this->_em->createQuery(
+                "  SELECT   u "
+                . "FROM     MainBundle:User u WHERE u.email=:email "
+                . "         AND u.password=:password");
+        $query->setParameter('email', $email);
+        $query->setParameter('password', $password);
+        
+        return $query->getSingleResult();
+    }
 }
