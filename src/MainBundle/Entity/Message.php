@@ -35,7 +35,20 @@ class Message
      */
     private $content;
 
-
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="useremitter_id")
+     */
+    private $userEmitter;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="userreceiver_id")
+     * @var User
+     */
+    private $userReceiver;
+    
     /**
      * Get id
      *
@@ -90,5 +103,51 @@ class Message
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set userEmitter
+     *
+     * @param \MainBundle\Entity\User $userEmitter
+     * @return Message
+     */
+    public function setUserEmitter(\MainBundle\Entity\User $userEmitter = null)
+    {
+        $this->userEmitter = $userEmitter;
+
+        return $this;
+    }
+
+    /**
+     * Get userEmitter
+     *
+     * @return \MainBundle\Entity\User 
+     */
+    public function getUserEmitter()
+    {
+        return $this->userEmitter;
+    }
+
+    /**
+     * Set userReceiver
+     *
+     * @param \MainBundle\Entity\User $userReceiver
+     * @return Message
+     */
+    public function setUserReceiver(\MainBundle\Entity\User $userReceiver = null)
+    {
+        $this->userReceiver = $userReceiver;
+
+        return $this;
+    }
+
+    /**
+     * Get userReceiver
+     *
+     * @return \MainBundle\Entity\User 
+     */
+    public function getUserReceiver()
+    {
+        return $this->userReceiver;
     }
 }

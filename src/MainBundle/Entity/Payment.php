@@ -21,7 +21,23 @@ class Payment
      */
     private $id;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $amount;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn
+     */
+    private $userEmitter;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn
+     */
+    private $userReceiver;
+    
     /**
      * Get id
      *
@@ -30,5 +46,74 @@ class Payment
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set amount
+     *
+     * @param integer $amount
+     * @return Payment
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Get amount
+     *
+     * @return integer 
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * Set userEmitter
+     *
+     * @param \MainBundle\Entity\User $userEmitter
+     * @return Payment
+     */
+    public function setUserEmitter(\MainBundle\Entity\User $userEmitter = null)
+    {
+        $this->userEmitter = $userEmitter;
+
+        return $this;
+    }
+
+    /**
+     * Get userEmitter
+     *
+     * @return \MainBundle\Entity\User 
+     */
+    public function getUserEmitter()
+    {
+        return $this->userEmitter;
+    }
+
+    /**
+     * Set userReceiver
+     *
+     * @param \MainBundle\Entity\User $userReceiver
+     * @return Payment
+     */
+    public function setUserReceiver(\MainBundle\Entity\User $userReceiver = null)
+    {
+        $this->userReceiver = $userReceiver;
+
+        return $this;
+    }
+
+    /**
+     * Get userReceiver
+     *
+     * @return \MainBundle\Entity\User 
+     */
+    public function getUserReceiver()
+    {
+        return $this->userReceiver;
     }
 }

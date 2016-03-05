@@ -35,7 +35,31 @@ class User
      */
     private $password;
 
+    /**
+     * @ORM\OneToMany(targetEntity="User", mappedBy="userEmitter")
+     */
+    private $messagesSent;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Message", mappedBy="userReceiver")
+     */
+    private $messagesReceived;
 
+    /**
+     * ORM\OneToMany(targetEntity="Ad", mappedBy="ads")
+     */
+    private $ads;
+    
+    /**
+     * ORM\OneToMany(targetEntity="Payment", mappedBy="userEmitter")
+     */
+    private $paymentsSent;
+    
+    /**
+     * ORM\OneToMany(targetEntity="Payment", mappedBy="userReceiver")
+     */
+    private $paymentsReceived;
+    
     /**
      * Get id
      *
@@ -90,5 +114,79 @@ class User
     public function getPassword()
     {
         return $this->password;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->messagesSent = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->messagesReceived = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add messagesSent
+     *
+     * @param \MainBundle\Entity\User $messagesSent
+     * @return User
+     */
+    public function addMessagesSent(\MainBundle\Entity\User $messagesSent)
+    {
+        $this->messagesSent[] = $messagesSent;
+
+        return $this;
+    }
+
+    /**
+     * Remove messagesSent
+     *
+     * @param \MainBundle\Entity\User $messagesSent
+     */
+    public function removeMessagesSent(\MainBundle\Entity\User $messagesSent)
+    {
+        $this->messagesSent->removeElement($messagesSent);
+    }
+
+    /**
+     * Get messagesSent
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMessagesSent()
+    {
+        return $this->messagesSent;
+    }
+
+    /**
+     * Add messagesReceived
+     *
+     * @param \MainBundle\Entity\Message $messagesReceived
+     * @return User
+     */
+    public function addMessagesReceived(\MainBundle\Entity\Message $messagesReceived)
+    {
+        $this->messagesReceived[] = $messagesReceived;
+
+        return $this;
+    }
+
+    /**
+     * Remove messagesReceived
+     *
+     * @param \MainBundle\Entity\Message $messagesReceived
+     */
+    public function removeMessagesReceived(\MainBundle\Entity\Message $messagesReceived)
+    {
+        $this->messagesReceived->removeElement($messagesReceived);
+    }
+
+    /**
+     * Get messagesReceived
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMessagesReceived()
+    {
+        return $this->messagesReceived;
     }
 }

@@ -21,6 +21,12 @@ class Ad
      */
     private $id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn
+     */
+    private $user;
+    
 
     /**
      * Get id
@@ -30,5 +36,28 @@ class Ad
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \MainBundle\Entity\User $user
+     * @return Ad
+     */
+    public function setUser(\MainBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \MainBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
