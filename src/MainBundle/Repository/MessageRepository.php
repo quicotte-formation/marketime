@@ -12,6 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class MessageRepository extends EntityRepository
 {
+    public function readMessage($messageId, $currentUserId){
+
+        $message = $this->find($messageId);
+        if( $message->getRead()==false && $message->getUserReceiver()->getId()==$currentUserId){
+
+            $message->setRead(true);
+            $this->getEntityManager()->flush();
+        }
+    }
+    
     public function findMessages($emitterId, $receiverId, $read){
         
         $qb = $this->createQueryBuilder("m")->orderBy("m.createDatetime", "DESC");

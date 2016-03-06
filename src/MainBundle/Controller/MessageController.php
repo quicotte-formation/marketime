@@ -17,19 +17,18 @@ use DateTime;
  *
  * @Route("/message")
  */
-class MessageController extends Controller
-{
+class MessageController extends Controller {
+
     /**
      * Lists all Message entities.
      *
      * @Route("/", name="message_index")
      * @Method("GET")
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         // Finds users in session
         $userId = (new Session())->get('userLogged')->getId();
-        
+
         // Gets all unread messages
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository('MainBundle:Message');
@@ -37,8 +36,8 @@ class MessageController extends Controller
         $messagesSent = $repository->findMessages($userId, null, null);
 
         return $this->render('message/index.html.twig', array(
-            'messagesReceived' => $messagesReceived,
-            'messagesSent' => $messagesSent
+                    'messagesReceived' => $messagesReceived,
+                    'messagesSent' => $messagesSent
         ));
     }
 
@@ -48,32 +47,31 @@ class MessageController extends Controller
      * @Route("/new", name="message_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $message = new Message();
         $form = $this->createForm('MainBundle\Form\MessageType', $message);
         $form->handleRequest($request);
 
         // Save the message as emitted by user in session with creation date now
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $em = $this->getDoctrine()->getManager();
             $session = new Session();
             $user = $em->find(User::class, $session->get('userLogged')->getId());
-            $user->addMessagesSent( $message );
+            $user->addMessagesSent($message);
             $message->setUserEmitter($user);
-            $message->setCreateDatetime( new DateTime() );
+            $message->setCreateDatetime(new DateTime());
             $message->setRead(false);
-            
+
             $em->persist($message);
             $em->flush();
 
-            return $this->redirectToRoute('message_show', array('id' => $message->getId()));
+            return $this->redirectToRoute('message_index');
         }
 
         return $this->render('message/new.html.twig', array(
-            'message' => $message,
-            'form' => $form->createView(),
+                    'message' => $message,
+                    'form' => $form->createView(),
         ));
     }
 
@@ -83,13 +81,14 @@ class MessageController extends Controller
      * @Route("/{id}", name="message_show")
      * @Method("GET")
      */
-    public function showAction(Message $message)
-    {
-        $deleteForm = $this->createDeleteForm($message);
-
+    public function showAction(Message $message) {
+        // Sets message to read if necessary
+        $userId = (new Session())->get('userLogged')->getId();
+        $repos = $this->getDoctrine()->getRepository(Message::class);
+        $repos->readMessage($message->getId(), $userId);
+        
         return $this->render('message/show.html.twig', array(
-            'message' => $message,
-            'delete_form' => $deleteForm->createView(),
+                    'message' => $message
         ));
     }
 
@@ -99,8 +98,7 @@ class MessageController extends Controller
      * @Route("/{id}/edit", name="message_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Message $message)
-    {
+    public function editAction(Request $request, Message $message) {
         $deleteForm = $this->createDeleteForm($message);
         $editForm = $this->createForm('MainBundle\Form\MessageType', $message);
         $editForm->handleRequest($request);
@@ -114,9 +112,9 @@ class MessageController extends Controller
         }
 
         return $this->render('message/edit.html.twig', array(
-            'message' => $message,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+                    'message' => $message,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -126,8 +124,7 @@ class MessageController extends Controller
      * @Route("/{id}", name="message_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Message $message)
-    {
+    public function deleteAction(Request $request, Message $message) {
         $form = $this->createDeleteForm($message);
         $form->handleRequest($request);
 
@@ -147,12 +144,12 @@ class MessageController extends Controller
      *
      * @return Form The form
      */
-    private function createDeleteForm(Message $message)
-    {
+    private function createDeleteForm(Message $message) {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('message_delete', array('id' => $message->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
+                        ->setAction($this->generateUrl('message_delete', array('id' => $message->getId())))
+                        ->setMethod('DELETE')
+                        ->getForm()
         ;
     }
+
 }

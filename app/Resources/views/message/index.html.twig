@@ -15,7 +15,7 @@
         </thead>
         <tbody>
             {% for message in messagesReceived %}
-                <tr>
+                <tr {% if not message.read %}style="font-weight: bold;"{% endif %}>
                     <td>{% if message.read==false %}NO{% endif %}</td>
                     <td><a href="{{ path('message_show', { 'id': message.id }) }}">{{ message.title }}</a></td>
                     <td>{{ message.userEmitter }}</td>
@@ -26,7 +26,6 @@
     </table>
         
     <h1>Sent messages</h1>
-    <br><br>
     <table>
         <thead>
             <tr>
