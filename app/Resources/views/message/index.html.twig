@@ -1,41 +1,50 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Message list</h1>
-
+    <h1>My mailbox</h1>
+    <a href="{{ path('message_new') }}">New message</a>
+    <br><br>
     <table>
         <thead>
             <tr>
-                <th>Id</th>
+                <th>Read</th>
                 <th>Title</th>
-                <th>Content</th>
-                <th>Actions</th>
+                <th>Sent by</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody>
-        {% for message in messages %}
-            <tr>
-                <td><a href="{{ path('message_show', { 'id': message.id }) }}">{{ message.id }}</a></td>
-                <td>{{ message.title }}</td>
-                <td>{{ message.content }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('message_show', { 'id': message.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('message_edit', { 'id': message.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for message in messagesReceived %}
+                <tr>
+                    <td>{% if message.read==false %}NO{% endif %}</td>
+                    <td><a href="{{ path('message_show', { 'id': message.id }) }}">{{ message.title }}</a></td>
+                    <td>{{ message.userEmitter }}</td>
+                    <td>{{ message.createDatetime | date }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('message_new') }}">Create a new entry</a>
-        </li>
-    </ul>
+        
+    <h1>Sent messages</h1>
+    <br><br>
+    <table>
+        <thead>
+            <tr>
+                <th>Read</th>
+                <th>Title</th>
+                <th>Sent to</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for message in messagesSent %}
+                <tr>
+                    <td>{% if message.read==false %}NO{% endif %}</td>
+                    <td><a href="{{ path('message_show', { 'id': message.id }) }}">{{ message.title }}</a></td>
+                    <td>{{ message.userReceiver }}</td>
+                    <td>{{ message.createDatetime | date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

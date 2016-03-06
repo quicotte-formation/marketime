@@ -12,4 +12,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class MessageRepository extends EntityRepository
 {
+    public function findMessages($emitterId, $receiverId, $read){
+        
+        $qb = $this->createQueryBuilder("m")->orderBy("m.createDatetime", "DESC");
+        if( $emitterId!=null ){
+            $qb->join("m.userEmitter", "ue");
+            $qb->where('ue.id=:emitterId');
+            $qb->setParameter('emitterId', $emitterId);
+        }
+        if( $receiverId!=null ){
+            $qb->join("m.userReceiver", "ur");
+            $qb->where('ur.id=:receiverId');
+            $qb->setParameter('receiverId', $receiverId);
+        }
+        if( $read!=null ){
+            $qb->where('read=:read')->setParameter('read', $read);
+        }
+        
+        return $qb->getQuery()->getResult();
+    }
 }

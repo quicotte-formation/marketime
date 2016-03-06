@@ -2,12 +2,15 @@
 
 namespace MainBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use MainBundle\Entity\Message;
+use MainBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use MainBundle\Entity\Message;
-use MainBundle\Form\MessageType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use DateTime;
 
 /**
  * Message controller.
@@ -24,12 +27,18 @@ class MessageController extends Controller
      */
     public function indexAction()
     {
+        // Finds users in session
+        $userId = (new Session())->get('userLogged')->getId();
+        
+        // Gets all unread messages
         $em = $this->getDoctrine()->getManager();
-
-        $messages = $em->getRepository('MainBundle:Message')->findAll();
+        $repository = $em->getRepository('MainBundle:Message');
+        $messagesReceived = $repository->findMessages(null, $userId, null);
+        $messagesSent = $repository->findMessages($userId, null, null);
 
         return $this->render('message/index.html.twig', array(
-            'messages' => $messages,
+            'messagesReceived' => $messagesReceived,
+            'messagesSent' => $messagesSent
         ));
     }
 
@@ -45,8 +54,17 @@ class MessageController extends Controller
         $form = $this->createForm('MainBundle\Form\MessageType', $message);
         $form->handleRequest($request);
 
+        // Save the message as emitted by user in session with creation date now
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $em = $this->getDoctrine()->getManager();
+            $session = new Session();
+            $user = $em->find(User::class, $session->get('userLogged')->getId());
+            $user->addMessagesSent( $message );
+            $message->setUserEmitter($user);
+            $message->setCreateDatetime( new DateTime() );
+            $message->setRead(false);
+            
             $em->persist($message);
             $em->flush();
 
@@ -127,7 +145,7 @@ class MessageController extends Controller
      *
      * @param Message $message The Message entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Message $message)
     {

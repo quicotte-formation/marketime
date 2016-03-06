@@ -47,7 +47,15 @@ class Message
      */
     private $userReceiver;
     
-    
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createDatetime;
+
+    /**
+     * @ORM\Column(name="isread", type="boolean")
+     */
+    private $read;
 
     /**
      * Get id
@@ -106,6 +114,29 @@ class Message
     }
 
     /**
+     * Set createDatetime
+     *
+     * @param \DateTime $createDatetime
+     * @return Message
+     */
+    public function setCreateDatetime($createDatetime)
+    {
+        $this->createDatetime = $createDatetime;
+
+        return $this;
+    }
+
+    /**
+     * Get createDatetime
+     *
+     * @return \DateTime 
+     */
+    public function getCreateDatetime()
+    {
+        return $this->createDatetime;
+    }
+
+    /**
      * Set userEmitter
      *
      * @param \MainBundle\Entity\User $userEmitter
@@ -149,5 +180,28 @@ class Message
     public function getUserReceiver()
     {
         return $this->userReceiver;
+    }
+
+    /**
+     * Set read
+     *
+     * @param boolean $read
+     * @return Message
+     */
+    public function setRead($read)
+    {
+        $this->read = $read;
+
+        return $this;
+    }
+
+    /**
+     * Get read
+     *
+     * @return boolean 
+     */
+    public function getRead()
+    {
+        return $this->read;
     }
 }
