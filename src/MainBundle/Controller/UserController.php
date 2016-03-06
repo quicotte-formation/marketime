@@ -19,6 +19,33 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class UserController extends Controller {
 
     /**
+     * Creates a new User entity.
+     *
+     * @Route("/signin", name="user_signin")
+     * @Method({"GET", "POST"})
+     */
+    public function signinAction(Request $request) {
+        $user = new User();
+        $form = $this->createForm('MainBundle\Form\UserType', $user);
+        $form->handleRequest($request);
+
+        // Creates the user with role ROLE_USER
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $user->setRole(User::ROLE_USER);
+            $em->persist($user);
+            $em->flush();
+
+            return $this->render('user/signin_ok.html.twig');
+        }
+
+        return $this->render('user/signin.html.twig', array(
+                    'user' => $user,
+                    'form' => $form->createView(),
+        ));
+    }
+    
+    /**
      * Lists all User entities.
      *
      * @Route("/", name="user_index")

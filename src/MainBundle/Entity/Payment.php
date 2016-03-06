@@ -25,6 +25,11 @@ class Payment
      * @ORM\Column(type="integer")
      */
     private $amount;
+    
+    /**
+     * @ORM\Column(name="message", type="text")
+     */
+    private $message;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")
@@ -117,5 +122,28 @@ class Payment
     public function getUserReceiver()
     {
         return $this->userReceiver;
+    }
+
+    /**
+     * Set message
+     *
+     * @param string $message
+     * @return Payment
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * Get message
+     *
+     * @return string 
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 }

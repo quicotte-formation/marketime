@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
+    const ROLE_USER = "ROLE_USER";
+    const ROLE_ADMIN = "ROLE_ADMIN";
+    const ROLE_MODERATOR = "ROLE_MODERATOR";
+    
     /**
      * @var int
      *
@@ -34,6 +38,11 @@ class User
      * @ORM\Column(name="password", type="string", length=32)
      */
     private $password;
+    
+    /**
+     * @ORM\Column(type="string", length=32)
+     */
+    private $role;
 
     /**
      * @ORM\OneToMany(targetEntity="Message", mappedBy="userEmitter")
@@ -46,7 +55,7 @@ class User
     private $messagesReceived;
 
     /**
-     * ORM\OneToMany(targetEntity="Ad", mappedBy="ads")
+     * @ORM\OneToMany(targetEntity="Ad", mappedBy="user")
      */
     private $ads;
     
@@ -60,7 +69,6 @@ class User
      */
     private $paymentsReceived;
     
-   
     
     /**
      * Constructor
@@ -128,6 +136,29 @@ class User
     }
 
     /**
+     * Set role
+     *
+     * @param string $role
+     * @return User
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return string 
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
      * Add messagesSent
      *
      * @param \MainBundle\Entity\Message $messagesSent
@@ -192,8 +223,42 @@ class User
     {
         return $this->messagesReceived;
     }
+
+    /**
+     * Add ads
+     *
+     * @param \MainBundle\Entity\Ad $ads
+     * @return User
+     */
+    public function addAd(\MainBundle\Entity\Ad $ads)
+    {
+        $this->ads[] = $ads;
+
+        return $this;
+    }
+
+    /**
+     * Remove ads
+     *
+     * @param \MainBundle\Entity\Ad $ads
+     */
+    public function removeAd(\MainBundle\Entity\Ad $ads)
+    {
+        $this->ads->removeElement($ads);
+    }
+
+    /**
+     * Get ads
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAds()
+    {
+        return $this->ads;
+    }
     
     public function __toString() {
+        
         return $this->email;
     }
 }

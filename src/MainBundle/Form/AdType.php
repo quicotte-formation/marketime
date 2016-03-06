@@ -5,6 +5,7 @@ namespace MainBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class AdType extends AbstractType
 {
@@ -15,9 +16,11 @@ class AdType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('adType', ChoiceType::class, 
+                    array('choices'=>array(true=>'Offer', false=>'Demand'),
+                          'expanded'=>true))
             ->add('title')
             ->add('content')
-            ->add('user')
         ;
     }
     

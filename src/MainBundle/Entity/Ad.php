@@ -22,10 +22,15 @@ class Ad
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="ads")
+     * @ORM\JoinColumn(name="user_id")
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $adType;
     
     /**
      * @ORM\Column(type="string", length=32)
@@ -113,6 +118,34 @@ class Ad
      */
     public function getTitle()
     {
+        return $this->title;
+    }
+
+    /**
+     * Set adType
+     *
+     * @param boolean $adType
+     * @return Ad
+     */
+    public function setAdType($adType)
+    {
+        $this->adType = $adType;
+
+        return $this;
+    }
+
+    /**
+     * Get adType
+     *
+     * @return boolean 
+     */
+    public function getAdType()
+    {
+        return $this->adType;
+    }
+    
+    public function __toString() {
+        
         return $this->title;
     }
 }

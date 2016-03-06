@@ -1,13 +1,14 @@
-<a href="{{ url('ad_index') }}">Ads</a>
-<a href="{{ url('category_index') }}">Categories</a>
-<a href="{{ url('message_index') }}">Messages</a>
-<a href="{{ url('payment_index') }}">Payments</a>
-<a href="{{ url('tag_index') }}">Tags</a>
-<a href="{{ url('user_index') }}">Users</a>
 {% set userLogin=render( url('user_logged_login') ) %}
 {% if userLogin is not empty %}
+
+    <a href="{{ url('user_index') }}">Users</a>
+    <a href="{{ url('ad_index') }}">Ads</a>
+    <a href="{{ url('message_index') }}">Messages</a>
+    <a href="{{ url('payment_index') }}">Payments</a>
+
     Logged-in as {{ userLogin }}
     <a href="{{ url('user_logout') }}">Logout</a>
 {% else %}
     <a href="{{ url('user_login') }}">Login</a>
+    <a href="{{ url('user_signin') }}">Sign in</a>
 {% endif %}

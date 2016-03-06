@@ -25,6 +25,11 @@ class Payment
      * @ORM\Column(type="integer")
      */
     private $amount;
+    
+    /**
+     * @ORM\Column(name="message", type="text")
+     */
+    private $message;
 
     /**
      * @ORM\ManyToOne(targetEntity="User")

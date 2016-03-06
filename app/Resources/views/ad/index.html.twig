@@ -6,26 +6,23 @@
     <table>
         <thead>
             <tr>
-                <th>Id</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Author</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for ad in ads %}
-            <tr>
-                <td><a href="{{ path('ad_show', { 'id': ad.id }) }}">{{ ad.id }}</a></td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('ad_show', { 'id': ad.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('ad_edit', { 'id': ad.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for ad in ads %}
+                <tr>
+                    <td><a href="{{ path('ad_show', { 'id': ad.id }) }}">{{ ad }}</a></td>
+                    <td>{% if ad.adType %}Offer{% else %}Demand{% endif %}</td>
+                    <td><a href="{{ path('ad_show', { 'id': ad.id }) }}">{{ ad.user }}</a></td>
+                    <td>
+                        <a href="{{ path('ad_show', { 'id': ad.id }) }}">Detail</a>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
